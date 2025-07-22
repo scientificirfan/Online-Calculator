@@ -1,5 +1,6 @@
 function insert(value) {
-    document.getElementById('result').value += value;
+    const input = document.getElementById('result');
+    input.value += value;
 }
 
 function clearScreen() {
@@ -7,26 +8,36 @@ function clearScreen() {
 }
 
 function backspace() {
-    let result = document.getElementById('result').value;
-    document.getElementById('result').value = result.slice(0, -1);
+    const input = document.getElementById('result');
+    input.value = input.value.slice(0, -1);
 }
 
 function calculate() {
-    let expression = document.getElementById('result').value;
+    const input = document.getElementById('result');
+    const expression = input.value;
+
     try {
-        let result = math.evaluate(expression);
-        document.getElementById('result').value = result;
+        // Prevent malicious code injection by removing alphabets (basic safeguard)
+        if (/[^0-9+\-*/().^%]/.test(expression)) {
+            throw new Error("Invalid Input");
+        }
+        const result = math.evaluate(expression);
+        input.value = result;
     } catch (error) {
-        document.getElementById('result').value = 'Error';
+        input.value = 'Error';
     }
 }
 
 function factorial() {
-    let number = document.getElementById('result').value;
+    const input = document.getElementById('result');
+    let number = input.value;
+
     try {
-        let result = math.factorial(eval(number));
-        document.getElementById('result').value = result;
+        if (!/^\d+$/.test(number)) throw new Error("Invalid factorial input");
+
+        let result = math.factorial(parseInt(number));
+        input.value = result;
     } catch (error) {
-        document.getElementById('result').value = 'Error';
+        input.value = 'Error';
     }
 }
